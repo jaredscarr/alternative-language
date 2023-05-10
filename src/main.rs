@@ -6,7 +6,7 @@
 // struct is class trait is interface sort of
 
 use regex::Regex;
-use serde::{Deserialize, Serialize, de::IntoDeserializer};
+use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fs::File, io, process};
 
 #[derive(Serialize, Debug, Deserialize, Clone)]
@@ -39,22 +39,6 @@ pub struct CellPhone {
 }
 
 impl CellPhone {
-    fn into_array(self) -> [Option<String>; 12] {
-        [
-            self.oem,
-            self.model,
-            self.launch_announced,
-            self.launch_status,
-            self.body_dimensions,
-            self.body_weight,
-            self.body_sim,
-            self.display_type,
-            self.display_size,
-            self.display_resolution,
-            self.features_sensors,
-            self.platform_os,
-        ]
-    }
 
     fn get_oem(&self) -> &Option<String> {
         return &self.oem;
@@ -426,11 +410,6 @@ impl FileHandler {
             record.sanitize_display_resolution();
             record.sanitize_features_sensors();
             record.sanitize_platform_os();
-            // println!("{:?}", i);
-            if i == 200 {
-                println!("{:?}", record);
-            }
-            // println!("{:?}", record.body_weight);
             
             let clean_record = SanitizedCellPhone {
                 oem: if record.oem.is_some() { record.get_oem().to_owned() } else { None },
@@ -452,33 +431,31 @@ impl FileHandler {
                 .table
                 .entry(
                     format!(
-                        "{}-{}",
+                        "{}-{}-{}",
+                        i,
                         clean_record.oem.as_ref().unwrap(),
                         clean_record.model.as_ref().unwrap()
                     )
                     .to_string(),
                 )
                 .or_insert_with(|| clean_record);
-            i = i + 1;
+            i += 1;
         }
 
-        for val in self.table.values() {
-            if val.body_weight.is_some() && val.body_weight.unwrap() >= 453.6 {
+        // for val in self.table.values() {
+        //     if val.body_weight.is_some() && val.body_weight.unwrap() >= 453.6 {
 
-                println!("{:?}", val);
-            }
-        }
+        //         println!("{:?}", val);
+        //     }
+        // }
 
-        // self.records = self.table.values().cloned().collect();
-        // 883 records so invalidated 1000 - 833 = 167 records
-        // println!("{:?}", self.records.len());
+        self.records = self.table.values().cloned().collect();
+        println!("{:?}", self.records.len());
         Ok(())
     }
 }
 
 // DONE BUT REVISIT: sanitize other columns DONE BUT DOUBLE CHECK LATER
-
-// TODO NEXT: begin conversion of record structs to new structs
 
 // TODO: implement stats on FinalCell
 // TODO: implement Display
