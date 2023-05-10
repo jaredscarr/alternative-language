@@ -6,7 +6,7 @@
 // struct is class trait is interface sort of
 
 use regex::Regex;
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize, de::IntoDeserializer};
 use std::{collections::HashMap, fs::File, io, process};
 
 #[derive(Serialize, Debug, Deserialize, Clone)]
@@ -153,7 +153,7 @@ impl CellPhone {
     }
 
     fn sanitize_launch_announced(&mut self) {
-        if self.body_weight.is_some() {
+        if self.launch_announced.is_some() {
             let captures: Vec<&str> = Regex::new(r"\d{4}")
                 .unwrap()
                 .find_iter(self.launch_announced.as_ref().unwrap())
@@ -168,8 +168,8 @@ impl CellPhone {
     }
 
     fn sanitize_launch_status(&mut self) {
-        if self.body_weight.is_some() {
-            let captures: Vec<&str> = Regex::new(r"\b\d{4}\b")
+        if self.launch_status.is_some() {
+            let captures: Vec<&str> = Regex::new(r"\d{4}")
                 .unwrap()
                 .find_iter(self.get_launched_status().as_ref().unwrap())
                 .map(|x| x.as_str())
@@ -184,7 +184,6 @@ impl CellPhone {
 
     fn sanitize_dimensions(&mut self) {
         if self.body_dimensions.is_some() {
-            // TODO: change this from regex to split string and just make sure it contains at least 3 x's to be valid
             let mut count = 0;
             for ch in self.body_dimensions.as_ref().unwrap().split("") {
                 if ch.to_string() == "x" {
@@ -200,7 +199,7 @@ impl CellPhone {
 
     fn sanitize_body_weight(&mut self) {
         if self.body_weight.is_some() {
-            let captures: Vec<&str> = Regex::new(r"\d*\.?\d+[^a-z|\s]")
+            let captures: Vec<&str> = Regex::new(r"[^-]\d*\.?\d*")
                 .unwrap()
                 .find_iter(self.body_weight.as_ref().unwrap())
                 .map(|x| x.as_str())
@@ -283,7 +282,7 @@ impl CellPhone {
 pub struct SanitizedCellPhone {
     oem: Option<String>,
     model: Option<String>,
-    launch_announced: Option<u64>,
+    launch_announced: Option<String>,
     launch_status: Option<String>,
     body_dimensions: Option<String>,
     body_weight: Option<f64>,
@@ -295,10 +294,108 @@ pub struct SanitizedCellPhone {
     platform_os: Option<String>,
 }
 
+impl SanitizedCellPhone {
+    fn get_oem(&self) -> &Option<String> {
+        return &self.oem;
+    }
+
+    fn set_oem(&mut self, new_oem: Option<String>) {
+        self.oem = new_oem;
+    }
+
+    fn get_model(&self) -> &Option<String> {
+        return &self.model;
+    }
+
+    fn set_model(&mut self, new_model: Option<String>) {
+        self.oem = new_model;
+    }
+
+    fn get_launched_announced(&self) -> &Option<String> {
+        return &self.launch_announced;
+    }
+
+    fn set_launch_announced(&mut self, new_year: Option<String>) {
+        self.launch_announced = new_year;
+    }
+
+    fn get_launched_status(&self) -> &Option<String> {
+        return &self.launch_status;
+    }
+
+    fn set_launch_status(&mut self, new_year: Option<String>) {
+        self.launch_status = new_year;
+    }
+
+    fn get_body_dimensions(&self) -> &Option<String> {
+        return &self.body_dimensions;
+    }
+
+    fn set_body_dimensions(&mut self, new_dimensions: Option<String>) {
+        self.body_dimensions = new_dimensions;
+    }
+
+    fn get_body_weight(&self) -> &Option<f64> {
+        return &self.body_weight;
+    }
+
+    fn set_body_weight(&mut self, new_weight: Option<f64>) {
+        self.body_weight = new_weight;
+    }
+
+    fn get_body_sim(&self) -> &Option<String> {
+        return &self.body_sim;
+    }
+
+    fn set_body_sim(&mut self, new_sim: Option<String>) {
+        self.body_sim = new_sim;
+    }
+
+    fn get_display_type(&self) -> &Option<String> {
+        return &self.display_type;
+    }
+
+    fn set_display_type(&mut self, new_display_type: Option<String>) {
+        self.body_sim = new_display_type;
+    }
+
+    fn get_display_size(&self) -> &Option<f64> {
+        return &self.display_size;
+    }
+
+    fn set_display_size(&mut self, new_size: Option<f64>) {
+        self.display_size = new_size;
+    }
+
+    fn get_display_resolution(&self) -> &Option<String> {
+        return &self.display_resolution;
+    }
+
+    fn set_display_resolution(&mut self, new_resolution: Option<String>) {
+        self.display_resolution = new_resolution;
+    }
+
+    fn get_features_sensors(&self) -> &Option<String> {
+        return &self.features_sensors;
+    }
+
+    fn set_features_sensors(&mut self, new_features: Option<String>) {
+        self.features_sensors = new_features;
+    }
+
+    fn get_platform_os(&self) -> &Option<String> {
+        return &self.platform_os;
+    }
+
+    fn set_platform_os(&mut self, new_platform: Option<String>) {
+        self.platform_os = new_platform;
+    }
+}
+
 pub struct FileHandler {
     file_path: String,
-    records: Vec<CellPhone>,
-    table: HashMap<String, CellPhone>,
+    records: Vec<SanitizedCellPhone>,
+    table: HashMap<String, SanitizedCellPhone>,
 }
 
 impl FileHandler {
@@ -306,7 +403,7 @@ impl FileHandler {
         FileHandler {
             file_path: file_path.to_string(),
             records: Vec::new(),
-            table: HashMap::<String, CellPhone>::new(),
+            table: HashMap::<String, SanitizedCellPhone>::new(),
         }
     }
 
@@ -319,9 +416,6 @@ impl FileHandler {
         let mut i = 0; // TODO: remove this before deployment
         for result in rdr.deserialize() {
             let mut record: CellPhone = result?;
-            // println!("{:?}", record);
-            // let test = record.get_display_size();
-
             record.sanitize_launch_announced();
             record.sanitize_launch_status();
             record.sanitize_dimensions();
@@ -332,39 +426,46 @@ impl FileHandler {
             record.sanitize_display_resolution();
             record.sanitize_features_sensors();
             record.sanitize_platform_os();
-
-            // println!("{:?}", test);
-            // TODO NEXT: call sanitize on record
-            // then create a new FinalCellPhone struct with correct fields]
-            // save that struct to the hashmap table
+            // println!("{:?}", i);
+            if i == 200 {
+                println!("{:?}", record);
+            }
+            // println!("{:?}", record.body_weight);
+            
+            let clean_record = SanitizedCellPhone {
+                oem: if record.oem.is_some() { record.get_oem().to_owned() } else { None },
+                model: if record.model.is_some() { record.get_model().to_owned() } else { None },
+                launch_announced: if record.launch_announced.is_some() { record.get_launched_announced().to_owned() } else { None },
+                launch_status: if record.launch_status.is_some() { record.get_launched_status().to_owned() } else { None },
+                body_dimensions: if record.body_dimensions.is_some() { record.get_body_dimensions().to_owned() } else { None },
+                body_weight: if record.body_weight.is_some() {Some(record.get_body_weight().to_owned().unwrap().parse::<f64>().unwrap()) } else { None },
+                body_sim: if record.body_sim.is_some() { record.get_body_sim().to_owned() } else { None },
+                display_type: if record.display_type.is_some() { record.get_display_type().to_owned() } else { None },
+                display_size: if record.display_size.is_some() {Some(record.get_display_size().to_owned().unwrap().parse::<f64>().unwrap()) } else { None },
+                display_resolution: if record.display_resolution.is_some() { record.get_display_resolution().to_owned() } else { None },
+                features_sensors: if record.display_resolution.is_some() { record.get_features_sensors().to_owned() } else { None },
+                platform_os: if record.platform_os.is_some() { record.get_platform_os().to_owned() } else { None },
+            };
+            
             // composite key: oem-model
             let entry = self
                 .table
                 .entry(
                     format!(
                         "{}-{}",
-                        record.oem.as_ref().unwrap(),
-                        record.model.as_ref().unwrap()
+                        clean_record.oem.as_ref().unwrap(),
+                        clean_record.model.as_ref().unwrap()
                     )
                     .to_string(),
                 )
-                .or_insert_with(|| record);
-
-            // println!("{:?}", record.oem);
-            // if i == 5 {
-            //     // TODO: remove this
-            //     break;
-            // }
-            // i = i + 1;
+                .or_insert_with(|| clean_record);
+            i = i + 1;
         }
 
         for val in self.table.values() {
-            if i > 5 {
-                break;
-            }
-            if val.body_dimensions.is_none() {
+            if val.body_weight.is_some() && val.body_weight.unwrap() >= 453.6 {
+
                 println!("{:?}", val);
-                i = i + 1;
             }
         }
 
