@@ -256,11 +256,11 @@ Rust calls libraries _crates_. I used the following:
 3. serde - A serialization tool that provides tools for serialization and deserialization of common file formats and the ability
 to write custom serializers and de-serializers. I chose this tool because it is one of the most popular crates available. Translating objects is a very common task so I decided to jump in and try to learn how to use one aspect of it. I used this as a first pass over the csv data that was read in. It provides some default handling for null values. Then I used it to deserialize and read in StringBuilder data to a struct.
 
-<sub>_note_: see [cargo.toml](../cargo.toml) more details about libraries.</sub>
+<sub>_note_: see [cargo.toml](Cargo.toml) more details about libraries.</sub>
 
 ### Analysis
 
-![terminal output](../screenshots/run_output.png)
+![terminal output](/screenshots/run_output.png)
 
 ## Resources
 
