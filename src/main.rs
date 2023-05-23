@@ -1,7 +1,11 @@
-use regex::Regex;
 use core::cmp::Ordering;
+use regex::Regex;
 use serde::{Deserialize, Serialize};
-use std::{collections::{HashMap, BinaryHeap, HashSet}, fs::File, io, process};
+use std::{
+    collections::{BinaryHeap, HashMap, HashSet},
+    fs::File,
+    io, process,
+};
 
 #[derive(Serialize, Debug, Deserialize, Clone)]
 pub struct CellPhone {
@@ -51,7 +55,7 @@ impl CellPhone {
     }
 
     fn get_oem(&self) -> &Option<String> {
-        return &self.oem;
+        &self.oem
     }
 
     fn set_oem(&mut self, new_oem: Option<String>) {
@@ -59,7 +63,7 @@ impl CellPhone {
     }
 
     fn get_model(&self) -> &Option<String> {
-        return &self.model;
+        &self.model
     }
 
     fn set_model(&mut self, new_model: Option<String>) {
@@ -67,7 +71,7 @@ impl CellPhone {
     }
 
     fn get_launched_announced(&self) -> &Option<String> {
-        return &self.launch_announced;
+        &self.launch_announced
     }
 
     fn set_launch_announced(&mut self, new_year: Option<String>) {
@@ -75,7 +79,7 @@ impl CellPhone {
     }
 
     fn get_launched_status(&self) -> &Option<String> {
-        return &self.launch_status;
+        &self.launch_status
     }
 
     fn set_launch_status(&mut self, new_year: Option<String>) {
@@ -83,7 +87,7 @@ impl CellPhone {
     }
 
     fn get_body_dimensions(&self) -> &Option<String> {
-        return &self.body_dimensions;
+        &self.body_dimensions
     }
 
     fn set_body_dimensions(&mut self, new_dimensions: Option<String>) {
@@ -91,7 +95,7 @@ impl CellPhone {
     }
 
     fn get_body_weight(&self) -> &Option<String> {
-        return &self.body_weight;
+        &self.body_weight
     }
 
     fn set_body_weight(&mut self, new_weight: Option<String>) {
@@ -99,7 +103,7 @@ impl CellPhone {
     }
 
     fn get_body_sim(&self) -> &Option<String> {
-        return &self.body_sim;
+        &self.body_sim
     }
 
     fn set_body_sim(&mut self, new_sim: Option<String>) {
@@ -107,7 +111,7 @@ impl CellPhone {
     }
 
     fn get_display_type(&self) -> &Option<String> {
-        return &self.display_type;
+        &self.display_type
     }
 
     fn set_display_type(&mut self, new_display_type: Option<String>) {
@@ -115,7 +119,7 @@ impl CellPhone {
     }
 
     fn get_display_size(&self) -> &Option<String> {
-        return &self.display_size;
+        &self.display_size
     }
 
     fn set_display_size(&mut self, new_size: Option<String>) {
@@ -123,7 +127,7 @@ impl CellPhone {
     }
 
     fn get_display_resolution(&self) -> &Option<String> {
-        return &self.display_resolution;
+        &self.display_resolution
     }
 
     fn set_display_resolution(&mut self, new_resolution: Option<String>) {
@@ -131,7 +135,7 @@ impl CellPhone {
     }
 
     fn get_features_sensors(&self) -> &Option<String> {
-        return &self.features_sensors;
+        &self.features_sensors
     }
 
     fn set_features_sensors(&mut self, new_features: Option<String>) {
@@ -139,7 +143,7 @@ impl CellPhone {
     }
 
     fn get_platform_os(&self) -> &Option<String> {
-        return &self.platform_os;
+        &self.platform_os
     }
 
     fn set_platform_os(&mut self, new_platform: Option<String>) {
@@ -225,8 +229,8 @@ impl CellPhone {
         if self.display_type.is_some() {
             if self.display_type.as_ref().unwrap() == "V1" {
                 self.set_display_type(None);
-            } 
-            
+            }
+
             if self.display_type.as_ref().unwrap() == "No" {
                 self.set_display_type(None);
             }
@@ -254,7 +258,6 @@ impl CellPhone {
 
     fn sanitize_display_resolution(&mut self) {
         if self.display_resolution.is_some() {
-            // TODO: change this from regex to split string and just make sure it contains at least 3 x's to be valid
             let mut count = 0;
             for ch in self.display_resolution.as_ref().unwrap().split("") {
                 if ch.to_string() == "x" {
@@ -317,7 +320,7 @@ impl PartialEq for SanitizedCellPhone {
     }
 }
 
-impl Eq for SanitizedCellPhone { }
+impl Eq for SanitizedCellPhone {}
 
 impl SanitizedCellPhone {
     pub fn new() -> SanitizedCellPhone {
@@ -339,7 +342,7 @@ impl SanitizedCellPhone {
     }
 
     fn get_id(&self) -> &Option<u64> {
-        return &self.id;
+        &self.id
     }
 
     fn set_id(&mut self, id: Option<u64>) {
@@ -347,7 +350,7 @@ impl SanitizedCellPhone {
     }
 
     fn get_oem(&self) -> &Option<String> {
-        return &self.oem;
+        &self.oem
     }
 
     fn set_oem(&mut self, new_oem: Option<String>) {
@@ -355,7 +358,7 @@ impl SanitizedCellPhone {
     }
 
     fn get_model(&self) -> &Option<String> {
-        return &self.model;
+        &self.model
     }
 
     fn set_model(&mut self, new_model: Option<String>) {
@@ -363,7 +366,7 @@ impl SanitizedCellPhone {
     }
 
     fn get_launched_announced(&self) -> &Option<String> {
-        return &self.launch_announced;
+        &self.launch_announced
     }
 
     fn set_launch_announced(&mut self, new_year: Option<String>) {
@@ -371,7 +374,7 @@ impl SanitizedCellPhone {
     }
 
     fn get_launched_status(&self) -> &Option<String> {
-        return &self.launch_status;
+        &self.launch_status
     }
 
     fn set_launch_status(&mut self, new_year: Option<String>) {
@@ -379,7 +382,7 @@ impl SanitizedCellPhone {
     }
 
     fn get_body_dimensions(&self) -> &Option<String> {
-        return &self.body_dimensions;
+        &self.body_dimensions
     }
 
     fn set_body_dimensions(&mut self, new_dimensions: Option<String>) {
@@ -387,7 +390,7 @@ impl SanitizedCellPhone {
     }
 
     fn get_body_weight(&self) -> &Option<f64> {
-        return &self.body_weight;
+        &self.body_weight
     }
 
     fn set_body_weight(&mut self, new_weight: Option<f64>) {
@@ -395,7 +398,7 @@ impl SanitizedCellPhone {
     }
 
     fn get_body_sim(&self) -> &Option<String> {
-        return &self.body_sim;
+        &self.body_sim
     }
 
     fn set_body_sim(&mut self, new_sim: Option<String>) {
@@ -403,7 +406,7 @@ impl SanitizedCellPhone {
     }
 
     fn get_display_type(&self) -> &Option<String> {
-        return &self.display_type;
+        &self.display_type
     }
 
     fn set_display_type(&mut self, new_display_type: Option<String>) {
@@ -411,7 +414,7 @@ impl SanitizedCellPhone {
     }
 
     fn get_display_size(&self) -> &Option<f64> {
-        return &self.display_size;
+        &self.display_size
     }
 
     fn set_display_size(&mut self, new_size: Option<f64>) {
@@ -419,7 +422,7 @@ impl SanitizedCellPhone {
     }
 
     fn get_display_resolution(&self) -> &Option<String> {
-        return &self.display_resolution;
+        &self.display_resolution
     }
 
     fn set_display_resolution(&mut self, new_resolution: Option<String>) {
@@ -427,7 +430,7 @@ impl SanitizedCellPhone {
     }
 
     fn get_features_sensors(&self) -> &Option<String> {
-        return &self.features_sensors;
+        &self.features_sensors
     }
 
     fn set_features_sensors(&mut self, new_features: Option<String>) {
@@ -435,7 +438,7 @@ impl SanitizedCellPhone {
     }
 
     fn get_platform_os(&self) -> &Option<String> {
-        return &self.platform_os;
+        &self.platform_os
     }
 
     fn set_platform_os(&mut self, new_platform: Option<String>) {
@@ -443,7 +446,7 @@ impl SanitizedCellPhone {
     }
 
     fn display(&self) -> String {
-        return format!("Id: {0} Manufacturer: {1}, model: {2}, year announced: {3}, year launched: {4}, body dimensions: {5}, body weight: {6}, sim: {7}, display type: {8}, display size: {9}, resolution: {10}, features: {11}, platform: {12}",
+        format!("Id: {0} Manufacturer: {1}, model: {2}, year announced: {3}, year launched: {4}, body dimensions: {5}, body weight: {6}, sim: {7}, display type: {8}, display size: {9}, resolution: {10}, features: {11}, platform: {12}",
         self.id.as_ref().unwrap(),
         self.oem.as_ref().unwrap(),
         self.model.as_ref().unwrap(),
@@ -456,14 +459,14 @@ impl SanitizedCellPhone {
         self.display_size.as_ref().unwrap(),
         self.display_resolution.as_ref().unwrap(),
         self.features_sensors.as_ref().unwrap(),
-        self.platform_os.as_ref().unwrap());
-    } 
+        self.platform_os.as_ref().unwrap())
+    }
 }
 
 pub struct FileHandler {
     file_path: String,
     records: Vec<SanitizedCellPhone>,
-    table: HashMap<String, SanitizedCellPhone>,
+    table: HashMap<String, Vec<SanitizedCellPhone>>,
     heap: BinaryHeap<SanitizedCellPhone>,
     total_weight: f64,
     max_weight: f64,
@@ -471,17 +474,16 @@ pub struct FileHandler {
     max_display_size: f64,
     min_display_size: f64,
     total_display_size: f64,
-    avg_weight: f64,
-    avg_display_size: f64
+    mean_weight: f64,
+    mean_display_size: f64,
 }
 
 impl FileHandler {
     pub fn new(file_path: &str) -> FileHandler {
         FileHandler {
             file_path: file_path.to_string(),
-            // 3 data structures chosen were a vector (array), binary heap, and a hashMap as per requirements
             records: Vec::<SanitizedCellPhone>::new(),
-            table: HashMap::<String, SanitizedCellPhone>::new(),
+            table: HashMap::<String, Vec<SanitizedCellPhone>>::new(),
             heap: BinaryHeap::<SanitizedCellPhone>::new(),
             total_weight: 0.0,
             max_weight: 0.0,
@@ -489,8 +491,8 @@ impl FileHandler {
             max_display_size: 0.0,
             min_display_size: 0.0,
             total_display_size: 0.0,
-            avg_weight: 0.0,
-            avg_display_size: 0.0
+            mean_weight: 0.0,
+            mean_display_size: 0.0,
         }
     }
 
@@ -591,21 +593,21 @@ impl FileHandler {
                     None
                 },
             };
-            
-            self.add_clean_record(i, clean_record);
+
+            self.add_clean_record(clean_record);
             i += 1;
         }
 
         Ok(())
     }
 
-    fn add_clean_record(&mut self, key: u64, rec: SanitizedCellPhone) {
+    fn add_clean_record(&mut self, rec: SanitizedCellPhone) {
         if rec.body_weight.is_some() {
             self.update_max_weight(rec.get_body_weight().unwrap());
             self.update_min_weight(rec.get_body_weight().unwrap());
             self.total_weight += rec.get_body_weight().unwrap();
         }
-            
+
         if rec.display_size.is_some() {
             self.update_max_display_size(rec.get_display_size().unwrap());
             self.update_min_display_size(rec.get_display_size().unwrap());
@@ -616,11 +618,15 @@ impl FileHandler {
         // copy into heap
         self.heap.push(rec.clone());
         // insert into hashMap
-        self.table.insert(key.to_string(), rec);
+        let rec_vec = self
+            .table
+            .entry(String::from(rec.get_oem().as_ref().unwrap()))
+            .or_insert(Vec::<SanitizedCellPhone>::new());
+        rec_vec.push(rec);
     }
 
     fn update_max_weight(&mut self, other: f64) {
-        self.max_weight = f64::max(self.max_weight, other);    
+        self.max_weight = f64::max(self.max_weight, other);
     }
 
     fn get_max_weight(&self) -> f64 {
@@ -643,30 +649,32 @@ impl FileHandler {
         self.min_display_size = f64::min(self.min_display_size, other);
     }
 
-    fn calc_avg_weight(&mut self) {
+    fn calc_mean_weight(&mut self) {
         if self.records.len() > 0 {
-            self.avg_weight = self.total_weight / self.records.len() as f64;
+            self.mean_weight = self.total_weight / self.records.len() as f64;
         }
     }
 
-    fn get_avg_weight(&self) -> f64 {
-        return self.avg_weight;
+    fn get_mean_weight(&self) -> f64 {
+        return self.mean_weight;
     }
 
-    fn calc_avg_display_size(&mut self) {
+    fn calc_mean_display_size(&mut self) {
         if self.records.len() > 0 {
-            self.avg_display_size = self.total_display_size / self.records.len() as f64;
+            self.mean_display_size = self.total_display_size / self.records.len() as f64;
         }
     }
 
-    fn get_avg_display_size(&self) -> f64 {
-        return self.avg_display_size;
+    fn get_mean_display_size(&self) -> f64 {
+        return self.mean_display_size;
     }
 
     fn get_median_weight(&mut self) -> f64 {
         if self.records.len() > 0 {
             self.records.sort_unstable();
-            return self.records[self.records.len() / 2].get_body_weight().unwrap();
+            return self.records[self.records.len() / 2]
+                .get_body_weight()
+                .unwrap();
         }
         return 0.0;
     }
@@ -674,29 +682,79 @@ impl FileHandler {
     fn get_median_display_size(&mut self) -> f64 {
         if self.records.len() > 0 {
             self.records.sort_unstable();
-            return self.records[self.records.len() / 2].get_display_size().unwrap();
+            return self.records[self.records.len() / 2]
+                .get_display_size()
+                .unwrap();
         }
-        return 0.0;
+        0.0
     }
 
-    // fn get_weight_std_dev(&mut self) -> f64 {
+    fn get_weight_std_dev(&self) -> Option<f64> {
+        // Return standard deviation or None. First time using this type of Some or None Option function.
+        // Help with algorithm from https://rust-lang-nursery.github.io/rust-cookbook/science/mathematics/statistics.html
+        match (self.get_mean_weight(), self.records.len()) {
+            (data_mean, count) if count > 0 => {
+                let variance = self
+                    .records
+                    .iter()
+                    .map(|value| {
+                        let diff = data_mean - (*value.get_body_weight().as_ref().unwrap());
 
-    // }
+                        diff * diff
+                    })
+                    .sum::<f64>()
+                    / count as f64;
 
-    // fn get_display_size_std_dev(&mut self) -> f64 {
+                Some(variance.sqrt())
+            }
+            _ => None,
+        }
+    }
 
-    // }
+    fn get_display_size_std_dev(&self) -> Option<f64> {
+        // Help from https://rust-lang-nursery.github.io/rust-cookbook/science/mathematics/statistics.html
+        match (self.get_mean_display_size(), self.records.len()) {
+            (data_mean, count) if count > 0 => {
+                let variance = self
+                    .records
+                    .iter()
+                    .map(|value| {
+                        let diff = data_mean - (*value.get_display_size().as_ref().unwrap());
 
-    fn delete_record(&mut self, record_id: u64) {
+                        diff * diff
+                    })
+                    .sum::<f64>()
+                    / count as f64;
+
+                Some(variance.sqrt())
+            }
+            _ => None,
+        }
+    }
+
+    fn delete_record(&mut self, record: SanitizedCellPhone) {
         // Delete record from all 3 data structures
-        self.table.remove(&record_id.to_string());
-        self.records.remove(record_id.try_into().unwrap());
         let mut found = false;
-        let mut stack = Vec::<SanitizedCellPhone>::new();
         let mut i = 0;
+        // delete from HashMap
+        let key = record.get_oem().as_ref().unwrap().to_string();
+        let rec_vec = self.table.get_mut(&key).unwrap();
+
+        while !found && i < rec_vec.len() {
+            if rec_vec[i].get_id().unwrap() == record.get_id().unwrap() {
+                rec_vec.remove(i);
+                found = true;
+            }
+            i += 1;
+        }
+
+        found = false;
+        let mut stack = Vec::<SanitizedCellPhone>::new();
+        i = 0;
+        // delete from heap
         while !found && i < self.heap.len() {
             let record = self.heap.pop().unwrap();
-            if record.get_id().unwrap() == record_id {
+            if record.get_id().unwrap() == record.get_id().unwrap() {
                 print!("{:?}", record.get_id());
                 found = true;
             } else {
@@ -708,22 +766,86 @@ impl FileHandler {
         while !stack.is_empty() {
             self.heap.push(stack.pop().unwrap());
         }
+
+        // delete from records vector
+        let record_id = record.get_id().unwrap();
+        self.records.remove(record_id.try_into().unwrap());
     }
 
     fn get_unique_column_vals(&mut self, col_name: &str) -> HashSet<String> {
         let mut result = HashSet::<String>::new();
-        for (_k, v) in self.table.iter() {
+        for rec in self.records.iter() {
             match col_name {
-                "oem" => if v.oem.is_some() { result.insert(v.get_oem().clone().unwrap()) } else { result.insert("".to_string()) },
-                "model" => if v .model.is_some() { result.insert(v.get_model().clone().unwrap()) } else { result.insert("".to_string()) },
-                "launch_announced" => if v.launch_announced.is_some() { result.insert(v.get_launched_announced().clone().unwrap()) } else { result.insert("".to_string()) },
-                "launch_status" => if v .launch_status.is_some() { result.insert(v.get_launched_status().clone().unwrap()) } else { result.insert("".to_string()) },
-                "body_dimensions" => if v.body_dimensions.is_some() { result.insert(v.get_body_dimensions().clone().unwrap()) } else { result.insert("".to_string()) },
-                "body_sim" => if v.body_sim.is_some() { result.insert(v.get_body_sim().clone().unwrap()) } else { result.insert("".to_string()) },
-                "display_type" => if v.display_type.is_some() { result.insert(v.get_display_type().clone().unwrap()) } else { result.insert("".to_string()) },
-                "display_resolution" => if v.display_resolution.is_some() { result.insert(v.get_display_resolution().clone().unwrap()) } else { result.insert("".to_string()) },
-                "features_sensors" => if v.features_sensors.is_some() { result.insert(v.get_features_sensors().clone().unwrap()) } else { result.insert("".to_string()) },
-                "platform_os" => if v.platform_os.is_some() { result.insert(v.get_platform_os().clone().unwrap()) } else { result.insert("".to_string()) },
+                "oem" => {
+                    if rec.oem.is_some() {
+                        result.insert(rec.get_oem().clone().unwrap())
+                    } else {
+                        result.insert("".to_string())
+                    }
+                }
+                "model" => {
+                    if rec.model.is_some() {
+                        result.insert(rec.get_model().clone().unwrap())
+                    } else {
+                        result.insert("".to_string())
+                    }
+                }
+                "launch_announced" => {
+                    if rec.launch_announced.is_some() {
+                        result.insert(rec.get_launched_announced().clone().unwrap())
+                    } else {
+                        result.insert("".to_string())
+                    }
+                }
+                "launch_status" => {
+                    if rec.launch_status.is_some() {
+                        result.insert(rec.get_launched_status().clone().unwrap())
+                    } else {
+                        result.insert("".to_string())
+                    }
+                }
+                "body_dimensions" => {
+                    if rec.body_dimensions.is_some() {
+                        result.insert(rec.get_body_dimensions().clone().unwrap())
+                    } else {
+                        result.insert("".to_string())
+                    }
+                }
+                "body_sim" => {
+                    if rec.body_sim.is_some() {
+                        result.insert(rec.get_body_sim().clone().unwrap())
+                    } else {
+                        result.insert("".to_string())
+                    }
+                }
+                "display_type" => {
+                    if rec.display_type.is_some() {
+                        result.insert(rec.get_display_type().clone().unwrap())
+                    } else {
+                        result.insert("".to_string())
+                    }
+                }
+                "display_resolution" => {
+                    if rec.display_resolution.is_some() {
+                        result.insert(rec.get_display_resolution().clone().unwrap())
+                    } else {
+                        result.insert("".to_string())
+                    }
+                }
+                "features_sensors" => {
+                    if rec.features_sensors.is_some() {
+                        result.insert(rec.get_features_sensors().clone().unwrap())
+                    } else {
+                        result.insert("".to_string())
+                    }
+                }
+                "platform_os" => {
+                    if rec.platform_os.is_some() {
+                        result.insert(rec.get_platform_os().clone().unwrap())
+                    } else {
+                        result.insert("".to_string())
+                    }
+                }
                 _ => result.insert("column not found".to_string()),
             };
             if result.contains("column not found") {
@@ -732,19 +854,9 @@ impl FileHandler {
         }
         // remove the empty string instances since they are actually nulls
         result.remove("");
-        return result;
+        result
     }
 }
-
-// TODO NEXT: implement stats on FileHandler MODE, standard deviation
-// Calculate statistics on columns, for numeric, descriptive stats such as  standard deviation, etc. For categorical columns, perhaps Mode or count of unique values.
-// Listing of unique values for each column.
-
-// display everthying from requirements in the main function
-
-// REPORT NOTES:
-// I still need to understand the Result type and how to handle OK() Error() inside of functions
-
 
 fn main() -> io::Result<()> {
     let mut fh = FileHandler::new("src/cells.csv");
@@ -753,26 +865,124 @@ fn main() -> io::Result<()> {
         println!("error running example: {}", err);
         process::exit(1);
     }
+    fh.calc_mean_weight();
+    fh.calc_mean_display_size();
+    println!(
+        "----------------------------------------------------------------------------------------"
+    );
+    println!("What company (oem) has the highest average weight of the phone body?");
 
-    // TODO: Display everything with clean prints here running all the stats
-    fh.calc_avg_weight();
-    let avg_weight = fh.get_avg_weight();
-    let median_weight = fh.get_median_weight();
-    println!("{:?}", avg_weight);
-    println!("{:?}", median_weight);
+    let mut highest_mean_oem = String::from("");
+    let mut highest_mean_weight = 0.0;
+    for (oem, recs) in fh.table {
+        let total_weight = recs
+            .iter()
+            .map(|rec| {
+                if rec.body_weight.is_some() {
+                    rec.get_body_weight().as_ref().unwrap()
+                } else {
+                    &0.0
+                }
+            })
+            .sum::<f64>();
+        let mean_weight = total_weight / recs.len() as f64;
+        if mean_weight > highest_mean_weight {
+            highest_mean_weight = mean_weight;
+            highest_mean_oem = oem;
+        }
+    }
 
-    let unique_models = fh.get_unique_column_vals("model");
-    println!("{:?}", unique_models.len());
+    println!("    {:?} with {:?}", highest_mean_oem, highest_mean_weight);
+    println!(
+        "----------------------------------------------------------------------------------------"
+    );
+    println!("Was there any phones that were announced in one year and released in another?");
+    let mut announced_released_ne = Vec::<SanitizedCellPhone>::new();
+    let mut launched_ge_2000 = Vec::<SanitizedCellPhone>::new();
+    let mut only_one_feature = Vec::<SanitizedCellPhone>::new();
 
-    fh.delete_record(3);
+    for rec in fh.records.iter() {
+        if rec.get_launched_status().is_some()
+            && rec
+                .get_launched_status()
+                .as_ref()
+                .unwrap()
+                .parse::<i32>()
+                .unwrap()
+                >= 2000
+        {
+            launched_ge_2000.push(rec.clone());
+        }
+
+        if rec.get_launched_announced().is_some() && rec.get_launched_status().is_some() {
+            if rec.get_launched_announced() != rec.get_launched_status() {
+                announced_released_ne.push(rec.clone());
+            }
+        }
+
+        if rec.get_features_sensors().is_some() {
+            let feature_count = rec.get_features_sensors().as_ref().unwrap().split(",");
+            if feature_count.count() < 2 {
+                only_one_feature.push(rec.clone());
+            }
+        }
+    }
+
+    for rec in announced_released_ne {
+        println!(
+            "    Oem: {:?} Model: {:?} Announced: {:?} Released: {:?}",
+            rec.get_oem().as_ref().unwrap(),
+            rec.get_model().as_ref().unwrap(),
+            rec.get_launched_announced().as_ref().unwrap(),
+            rec.get_launched_status().as_ref().unwrap()
+        );
+    }
+    println!(
+        "----------------------------------------------------------------------------------------"
+    );
+
+    println!("How many phones have only one feature sensor?");
+    for rec in only_one_feature {
+        println!(
+            "    Oem: {:?} Model: {:?} Feature: {:?}",
+            rec.get_oem().as_ref().unwrap(),
+            rec.get_model().as_ref().unwrap(),
+            rec.get_features_sensors().as_ref().unwrap()
+        );
+    }
+    println!(
+        "----------------------------------------------------------------------------------------"
+    );
+    println!("What year had the most phones launched in the 2000s?");
+    let mut year_count = HashMap::<String, i32>::new();
+    for rec in launched_ge_2000 {
+        let count = year_count
+            .entry(rec.get_launched_status().as_ref().unwrap().to_string())
+            .or_insert(0);
+        *count += 1;
+    }
+    let mut max_year_count = 0;
+    let mut max_year = "".to_string();
+    for (year, count) in year_count {
+        if count > max_year_count {
+            max_year_count = count;
+            max_year = year;
+        }
+    }
+    println!(
+        "    Most phones launched in {:?} with {:?} phones.",
+        max_year, max_year_count
+    );
+    println!(
+        "----------------------------------------------------------------------------------------"
+    );
     Ok(())
 }
 
-
 #[cfg(test)]
 mod tests {
-    use std::{vec, ops::Deref};
     use crate::{CellPhone, FileHandler, SanitizedCellPhone};
+    use std::{ops::Deref, vec};
 
     #[test]
     fn test_dash_converted_to_null() {
@@ -805,11 +1015,11 @@ mod tests {
             test_sani_rec.set_oem(Some("test_oem".to_string()));
             test_sani_rec.set_model(Some("test_model".to_string()));
             test_sani_rec.set_body_weight(Some(*val.deref()));
-            test_fh.add_clean_record(i.try_into().unwrap(), test_sani_rec);
+            test_fh.add_clean_record(test_sani_rec);
         }
-        
-        test_fh.calc_avg_weight();
-        let result = test_fh.get_avg_weight();
+
+        test_fh.calc_mean_weight();
+        let result = test_fh.get_mean_weight();
         assert_eq!(5.0, result);
     }
 
@@ -822,25 +1032,25 @@ mod tests {
             test_sani_rec.set_oem(Some("test_oem".to_string()));
             test_sani_rec.set_model(Some("test_model".to_string()));
             test_sani_rec.set_body_weight(Some(*val.deref()));
-            test_fh.add_clean_record(i.try_into().unwrap(), test_sani_rec);
+            test_fh.add_clean_record(test_sani_rec);
         }
 
-        test_fh.calc_avg_weight();
-        let result = test_fh.get_avg_weight();
+        test_fh.calc_mean_weight();
+        let result = test_fh.get_mean_weight();
         assert_eq!(4.0, result);
     }
 
     #[test]
     fn get_avg_weight_no_records() {
         let mut test_fh = FileHandler::new("src/empty_cells.csv");
-        test_fh.calc_avg_weight();
-        let result = test_fh.get_avg_weight();
+        test_fh.calc_mean_weight();
+        let result = test_fh.get_mean_weight();
         assert_eq!(0.0, result);
     }
 
     #[test]
     fn display_san_rec() {
-        let mut record = SanitizedCellPhone::new(); 
+        let mut record = SanitizedCellPhone::new();
         record.set_oem(Some("test_oem".to_string()));
         record.set_model(Some("test_model".to_string()));
         let display_output = record.display();
@@ -856,10 +1066,12 @@ mod tests {
             let mut test_sani_rec = SanitizedCellPhone::new();
             test_sani_rec.set_oem(Some("test_oem".to_string()));
             test_sani_rec.set_model(Some(format!("{}_test_model", i)));
-            test_fh.add_clean_record(i.try_into().unwrap(), test_sani_rec);
+            test_fh.add_clean_record(test_sani_rec);
         }
-        let actual_man_set: std::collections::HashSet<String> = test_fh.get_unique_column_vals("oem");
-        let actual_model_set: std::collections::HashSet<String> = test_fh.get_unique_column_vals("model");
+        let actual_man_set: std::collections::HashSet<String> =
+            test_fh.get_unique_column_vals("oem");
+        let actual_model_set: std::collections::HashSet<String> =
+            test_fh.get_unique_column_vals("model");
         assert_eq!(1, actual_man_set.len());
         assert_eq!(4, actual_model_set.len());
     }
@@ -871,7 +1083,7 @@ mod tests {
         for i in 0..4 {
             let mut test_sani_rec = SanitizedCellPhone::new();
             test_sani_rec.set_oem(Some("chicken".to_string()));
-            test_fh.add_clean_record(i.try_into().unwrap(), test_sani_rec);
+            test_fh.add_clean_record(test_sani_rec);
         }
         let actual: std::collections::HashSet<String> = test_fh.get_unique_column_vals("chicken");
         assert_eq!(1, actual.len());
@@ -887,17 +1099,47 @@ mod tests {
             test_sani_rec.set_id(Some(i));
             test_sani_rec.set_oem(Some("test_oem".to_string()));
             test_sani_rec.set_model(Some(format!("{}_test_model", i)));
-            test_fh.add_clean_record(i.try_into().unwrap(), test_sani_rec);
+            test_fh.add_clean_record(test_sani_rec);
         }
 
         assert_eq!(4, test_fh.records.len());
-        assert_eq!(4, test_fh.table.len());
+        assert_eq!(4, test_fh.table["test_oem"].len());
         assert_eq!(4, test_fh.heap.len());
 
-        test_fh.delete_record(2);
+        test_fh.delete_record(test_fh.table["test_oem"][1].clone());
 
         assert_eq!(3, test_fh.records.len());
-        assert_eq!(3, test_fh.table.len());
+        assert_eq!(3, test_fh.table["test_oem"].len());
         assert_eq!(3, test_fh.heap.len());
+    }
+
+    #[test]
+    fn calc_weight_std_dev() {
+        let mut test_fh = FileHandler::new("src/empty_cells.csv");
+
+        for i in 0..4 {
+            let mut test_sani_rec = SanitizedCellPhone::new();
+            test_sani_rec.set_id(Some(i));
+            test_sani_rec.set_body_weight(Some(i as f64));
+            test_fh.add_clean_record(test_sani_rec);
+        }
+
+        let actual = test_fh.get_weight_std_dev();
+        assert_ne!(None, actual);
+    }
+
+    #[test]
+    fn calc_display_std_dev() {
+        let mut test_fh = FileHandler::new("src/empty_cells.csv");
+
+        for i in 0..4 {
+            let mut test_sani_rec = SanitizedCellPhone::new();
+            test_sani_rec.set_id(Some(i));
+            test_sani_rec.set_display_size(Some(i as f64));
+            test_fh.add_clean_record(test_sani_rec);
+        }
+
+        let actual = test_fh.get_display_size_std_dev();
+        assert_ne!(None, actual);
     }
 }
