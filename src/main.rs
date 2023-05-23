@@ -942,14 +942,7 @@ fn main() -> io::Result<()> {
     );
 
     println!("How many phones have only one feature sensor?");
-    for rec in only_one_feature {
-        println!(
-            "    Oem: {:?} Model: {:?} Feature: {:?}",
-            rec.get_oem().as_ref().unwrap(),
-            rec.get_model().as_ref().unwrap(),
-            rec.get_features_sensors().as_ref().unwrap()
-        );
-    }
+    println!("{:?}", only_one_feature.len());
     println!(
         "----------------------------------------------------------------------------------------"
     );
