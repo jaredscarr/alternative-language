@@ -271,12 +271,6 @@ impl CellPhone {
         }
     }
 
-    fn sanitize_features_sensors(&mut self) {
-        if self.features_sensors.is_some() && self.features_sensors.as_ref().unwrap() == "V1" {
-            self.set_features_sensors(None);
-        }
-    }
-
     fn sanitize_platform_os(&mut self) {
         if self.platform_os.is_some() {
             let result: Vec<&str> = self.platform_os.as_ref().unwrap().split(",").collect();
@@ -513,7 +507,7 @@ impl FileHandler {
             record.sanitize_display_type();
             record.sanitize_display_size();
             record.sanitize_display_resolution();
-            record.sanitize_features_sensors();
+            record.get_features_sensors();
             record.sanitize_platform_os();
 
             let clean_record = SanitizedCellPhone {
