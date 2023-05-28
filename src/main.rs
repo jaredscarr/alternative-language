@@ -4,7 +4,9 @@ use serde::{Deserialize, Serialize};
 use std::{
     collections::{BinaryHeap, HashMap, HashSet},
     fs::File,
-    io, process,
+    io,
+    num::ParseIntError,
+    process,
 };
 
 #[derive(Serialize, Debug, Deserialize, Clone)]
@@ -167,15 +169,19 @@ impl CellPhone {
 
     fn sanitize_launch_status(&mut self) {
         if self.launch_status.is_some() {
-            let captures: Vec<&str> = Regex::new(r"\d{4}")
-                .unwrap()
-                .find_iter(self.get_launched_status().as_ref().unwrap())
-                .map(|x| x.as_str())
-                .collect();
-            if captures.len() > 0 {
-                self.set_launch_status(Some(captures[0].to_string()));
-            } else {
-                self.set_launch_status(None);
+            if self.get_launched_status().as_ref().unwrap() != "Discontinued"
+                && self.get_launched_status().as_ref().unwrap() != "Cancelled"
+            {
+                let captures: Vec<&str> = Regex::new(r"\d{4}")
+                    .unwrap()
+                    .find_iter(self.get_launched_status().as_ref().unwrap())
+                    .map(|x| x.as_str())
+                    .collect();
+                if captures.len() > 0 {
+                    self.set_launch_status(Some(captures[0].to_string()));
+                } else {
+                    self.set_launch_status(None);
+                }
             }
         }
     }
@@ -896,21 +902,28 @@ fn main() -> io::Result<()> {
     let mut only_one_feature = Vec::<SanitizedCellPhone>::new();
 
     for rec in fh.records.iter() {
-        if rec.get_launched_status().is_some()
-            && rec
-                .get_launched_status()
-                .as_ref()
-                .unwrap()
-                .parse::<i32>()
-                .unwrap()
-                >= 2000
-        {
-            launched_ge_2000.push(rec.clone());
+        if rec.get_launched_status().is_some() {
+            let result: Result<i32, ParseIntError> =
+                rec.get_launched_status().as_ref().unwrap().parse::<i32>();
+            match result {
+                Ok(result) => {
+                    if result >= 2000 {
+                        launched_ge_2000.push(rec.clone());
+                    }
+                }
+                Err(e) => {}
+            }
         }
 
         if rec.get_launched_announced().is_some() && rec.get_launched_status().is_some() {
-            if rec.get_launched_announced() != rec.get_launched_status() {
-                announced_released_ne.push(rec.clone());
+            if rec.get_launched_announced().as_ref().unwrap()
+                != rec.get_launched_status().as_ref().unwrap()
+            {
+                if rec.get_launched_status().as_ref().unwrap() != "Discontinued"
+                    && rec.get_launched_status().as_ref().unwrap() != "Cancelled"
+                {
+                    announced_released_ne.push(rec.clone());
+                }
             }
         }
 
@@ -1128,5 +1141,31 @@ mod tests {
 
         let actual = test_fh.get_display_size_std_dev();
         assert_ne!(None, actual);
+    }
+
+    #[test]
+    fn sanitize_launch_status_leaves_discontinued_and_cancelled() {
+        let mut test_fh = FileHandler::new("src/test_csv.csv");
+        if let Err(err) = test_fh.read_csv() {
+            println!("error running example: {}", err);
+        }
+        let mut disc_found = false;
+        let mut cancel_found = false;
+
+        for rec in test_fh.records.iter() {
+            if rec.launch_status.is_some()
+                && rec.get_launched_status().as_ref().unwrap() == "Discontinued"
+            {
+                disc_found = true;
+            }
+
+            if rec.launch_status.is_some()
+                && rec.get_launched_status().as_ref().unwrap() == "Cancelled"
+            {
+                cancel_found = true;
+            }
+        }
+        assert_eq!(cancel_found, true);
+        assert_eq!(disc_found, true);
     }
 }
